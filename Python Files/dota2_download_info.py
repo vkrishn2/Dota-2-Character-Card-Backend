@@ -2,6 +2,8 @@ import requests
 import json
 import sys
 from os import path
+import time
+import re
 
 def get_info():
     response = json.loads(requests.get("https://www.dota2.com/datafeed/herolist?language=english").text)
@@ -10,7 +12,7 @@ def get_info():
     print("The number of heroes in Dota 2: ",numheroes)
 
     id_dict = {value['id']:value['name_english_loc'] for value in response['result']['data']['heroes']}
-    print("DEBUG id_dict: ", id_dict)
+    #print("DEBUG id_dict: ", id_dict)
 
     with open('herolist.json','w') as f1:
         json.dump(response, f1)
@@ -19,12 +21,13 @@ def get_info():
     count = 0
     with open('heroes.json','w') as f:
         f.write('[')
-        for id,name in id_dict.items():
-            count += 1
-            response = json.loads(requests.get("http://www.dota2.com/datafeed/herodata?language=english&hero_id="+str(id)).text)
-            json.dump(response, f)
+        for id_val,name in id_dict.items():
+            count += 1 
+            time.sleep(5)
+            response2 = json.loads(requests.get("http://www.dota2.com/datafeed/herodata?language=english&hero_id="+str(id_val)).text)
             if count != numheroes:
                 f.write(',')
+        json.dump(val1, f)
         f.write(']')
 
 
